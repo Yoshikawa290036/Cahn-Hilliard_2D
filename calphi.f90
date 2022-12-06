@@ -1,4 +1,4 @@
-subroutine calphi2(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
+subroutine calphi(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
     implicit none
     integer :: ni
     double precision :: u
@@ -57,4 +57,4 @@ subroutine calphi2(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
     do i = 0, ni+1
         phi(i) = nphi1(i)
     end do
-end subroutine calphi2
+end subroutine calphi

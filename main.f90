@@ -1,23 +1,26 @@
 program main
     implicit none
 
-    integer :: ni
-    integer :: i
-    double precision :: x
+    integer :: ni, nj
+    integer :: i, j
+    double precision :: x, y
     double precision :: phimin, phimax
-    double precision :: dx, dxinv
-    double precision :: xl
+    double precision :: dx, dxinv, dy, dyinv
+    double precision :: xl, yl
     double precision :: t, dt
     double precision :: a, b, temperature, kappa
-    double precision :: u
-    double precision, dimension(:), allocatable :: phi
+    double precision :: u, v
+    double precision, dimension(:, :), allocatable :: phi
     integer :: maxstep, step
     integer :: dataou
     character(32) fname
 
     dataou = 1000
     maxstep = 80000
-    ni = 128
+
+    ni = 64
+    nj = 64
+
     a = 1.0d0
     b = 1.0d0
     kappa = 0.1d0
@@ -25,31 +28,35 @@ program main
 
     dt = 2.5e-2
     dx = 1.0d0
+    dy = 1.0d0
 
     phimin = 0.265d0
     phimax = 0.405d0
 
     xl = dx*dble(ni)
+    yl = dy*dble(nj)
+    dxinv = 1.0d0/dx
+    dyinv = 1.0d0/dy
 
     u = 0.5d0
+    v = 0.5d0
+
     step = 0
     include'allocate.h'
-    dxinv = 1.0d0/dx
 
     write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
-    call init(ni, phi, phimin, phimax, 32)
+    call init(ni, nj, dx, dy, phi, phimin, phimax, 5.0d0)
 
     include'mkphi.h'
 
-    do step = 1, maxstep
-        call bundset(ni, phi)
-        ! call calphi(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
-        call calphi2(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
+    ! do step = 1, maxstep
+    !     call bundset(ni, phi)
+    !     call calphi(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
 
-        if (mod(step,dataou) == 0) then
-            include'mkphi.h'
-        end if
+    !     if (mod(step, dataou) == 0) then
+    !         include'mkphi.h'
+    !     end if
 
-    end do
+    ! end do
 
 end program main
