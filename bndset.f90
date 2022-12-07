@@ -9,6 +9,10 @@ subroutine bndset(ni, nj, phi)
     integer :: i, j
 
     ! left wall
+!$OMP  PARALLEL DO &
+!$OMP& SCHEDULE(static,1) &
+!$OMP& DEFAULT(SHARED) &
+!$OMP& PRIVATE(j)
     do j = 1, nj
         phi(0, j) = phi(ni, j)
         phi(-1, j) = phi(ni-1, j)
@@ -18,8 +22,13 @@ subroutine bndset(ni, nj, phi)
         phi(-5, j) = phi(ni-5, j)
         phi(-6, j) = phi(ni-6, j)
     end do
+!$OMP  END PARALLEL DO
 
     ! right wall
+!$OMP  PARALLEL DO &
+!$OMP& SCHEDULE(static,1) &
+!$OMP& DEFAULT(SHARED) &
+!$OMP& PRIVATE(j)
     do j = 1, nj
         phi(ni+1, j) = phi(1, j)
         phi(ni+2, j) = phi(2, j)
@@ -29,8 +38,13 @@ subroutine bndset(ni, nj, phi)
         phi(ni+6, j) = phi(6, j)
         phi(ni+7, j) = phi(7, j)
     end do
+!$OMP  END PARALLEL DO
 
     ! bottom wall
+!$OMP  PARALLEL DO &
+!$OMP& SCHEDULE(static,1) &
+!$OMP& DEFAULT(SHARED) &
+!$OMP& PRIVATE(i)
     do i = 0, ni
         phi(i, 0) = phi(i, nj)
         phi(i, -1) = phi(i, nj-1)
@@ -40,8 +54,13 @@ subroutine bndset(ni, nj, phi)
         phi(i, -5) = phi(i, nj-5)
         phi(i, -6) = phi(i, nj-6)
     end do
+!$OMP  END PARALLEL DO
 
     ! top wall
+!$OMP  PARALLEL DO &
+!$OMP& SCHEDULE(static,1) &
+!$OMP& DEFAULT(SHARED) &
+!$OMP& PRIVATE(i)
     do i = 0, ni
         phi(i, nj+1) = phi(i, 1)
         phi(i, nj+2) = phi(i, 2)
@@ -51,6 +70,7 @@ subroutine bndset(ni, nj, phi)
         phi(i, nj+6) = phi(i, 6)
         phi(i, nj+7) = phi(i, 7)
     end do
+!$OMP  END PARALLEL DO
 
     ! left bottom
     do j = -6, 0

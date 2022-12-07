@@ -13,6 +13,11 @@ subroutine init(ni, nj, dx, dy, phi, phimin, phimax, R)
     midy = (dble(nj/2)-0.5d0)*dy
 
     ! write (*, *) midx, midy
+
+!$OMP  PARALLEL DO &
+!$OMP& SCHEDULE(static,1) &
+!$OMP& DEFAULT(SHARED) &
+!$OMP& PRIVATE(i,j,x,y)
     do j = -6, nj+7
         do i = -6, ni+7
             x = (dble(i)-0.5d0)*dx
@@ -24,6 +29,7 @@ subroutine init(ni, nj, dx, dy, phi, phimin, phimax, R)
             end if
         end do
     end do
+!$OMP  END PARALLEL DO
 
     ! do j = -6, nj+7
     !     do i = -6, ni+7
