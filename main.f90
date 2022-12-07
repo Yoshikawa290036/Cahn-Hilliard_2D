@@ -39,7 +39,7 @@ program main
     dyinv = 1.0d0/dy
 
     u = 0.5d0
-    v = 0.0d0
+    v = 0.5d0
 
     include'allocate.h'
     write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
