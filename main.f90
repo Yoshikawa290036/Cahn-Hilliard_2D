@@ -39,7 +39,7 @@ program main
     dyinv = 1.0d0/dy
 
     u = 0.5d0
-    v = 0.5d0
+    v = 0.0d0
 
     include'allocate.h'
     write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
@@ -47,14 +47,14 @@ program main
     call bndset(ni, nj, phi)
     include'mkphi.h'
 
-    ! do step = 1, maxstep
-    !     call bundset(ni, phi)
-    !     call calphi(ni, u, dxinv, phi, dt, a, b, temperature, kappa)
+    do step = 1, maxstep
+        call bndset(ni, nj, phi)
+        call calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 
-    !     if (mod(step, dataou) == 0) then
-    !         include'mkphi.h'
-    !     end if
+        if (mod(step, dataou) == 0) then
+            include'mkphi.h'
+        end if
 
-    ! end do
+    end do
 
 end program main
