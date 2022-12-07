@@ -102,14 +102,14 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
             call nabla(dyinv, phipy(i,j-2)*Jpy(i,j-2), phipy(i,j-1)*Jpy(i,j-1), phipy(i,j)*Jpy(i,j), phipy(i,j+1)*Jpy(i,j+1), dchpy)
             chpy(i,j) = gamma*dchpy
 
-            nphi1(i,j) = phi(i,j)-dt*(advy(i,j)+chpy(i,j))
+            ! nphi1(i,j) = phi(i,j)-dt*(advy(i,j)+chpy(i,j))
         end do
     end do
 
 
     do j = 0, nj+1
         do i = 0, ni+1
-            phi(i,j) = nphi1(i,j)
+            phi(i,j) = phi(i,j)-dt*(advx(i,j)+advy(i,j)+chpx(i,j)+chpy(i,j))
         end do
     end do
 
