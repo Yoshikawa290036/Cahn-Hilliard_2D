@@ -2,17 +2,24 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
     implicit none
     integer :: ni, nj
     double precision :: u, v, dxinv, dyinv
-    double precision :: phi(-6:ni+7, -6:nj+7), phipx(-6:ni+7, -6:nj+7), phipy(-6:ni+7, -6:nj+7), dphix, dphipx
+    double precision :: phi(-6:ni+7, -6:nj+7)
+    double precision :: phipx(-6:ni+7, -6:nj+7), dphix, dphipx
+    double precision :: phipy(-6:ni+7, -6:nj+7), dphiy, dphipy
+
     double precision :: ddphix, ddphiy, ddphi(-6:ni+7, -6:nj+7)
     double precision :: nphi1(-6:ni+7, -6:nj+7), nphi2(-6:ni+7, -6:nj+7)
     double precision :: dt
     double precision :: a, b, temperature, kappa
     integer :: i, j
     double precision :: advx(-6:ni+7, -6:nj+7), chpx(-6:ni+7, -6:nj+7)
-    double precision :: Jpx(-6:ni+7, -6:nj+7), Jpy(-6:ni+7, -6:nj+7), zetapx, zetapy
+    double precision :: advy(-6:ni+7, -6:nj+7), chpy(-6:ni+7, -6:nj+7)
+    double precision :: Jpx(-6:ni+7, -6:nj+7), zetapx
+    double precision :: Jpy(-6:ni+7, -6:nj+7), zetapy
     double precision :: Gamma
-    double precision :: m1x, m2x, p0x, p1x, p2x, m1y, m2y, p0y, p1y, p2y
+    double precision :: m1x, m2x, p0x, p1x, p2x
+    double precision :: m1y, m2y, p0y, p1y, p2y
     double precision :: dddphipx, dchpx
+    double precision :: dddphipy, dchpy
 
     Gamma = 12.0d0
 
@@ -36,6 +43,9 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
         end do
     end do
 
+
+! cal x direction of advection and chemical potential term
+! ========================================================
     do j = -6, nj+7
         do i = -5, ni+5
             phipx(i, j) = 1.0d0/16.0d0* &
@@ -43,17 +53,10 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
         end do
     end do
 
-    do j = -5, nj+5
-        do i = -6, ni+7
-            phipy(i, j) = 1.0d0/16.0d0* &
-                    & (-phi(i, j-1)+9.0d0*phi(i, j)+9.0d0*phi(i, j+1)-phi(i, j+2))
-        end do
-    end do
-
     do j = -4, nj+5
         do i = -2, ni+3
             zetapx = (temperature/((1.0d0-b*phipx(i, j))**2))-2.0d0*a*phipx(i, j)
-            call nabla(dxinv, phi(i-1,j)  , phi(i,j)  , phi(i+1,j)  , phi(i+2,j)  , dphipx )
+            call nabla(dxinv, phi(i-1,j)  , phi(i,j)  , phi(i+1,j)  , phi(i+2,j)  , dphipx  )
             call nabla(dxinv, ddphi(i-1,j), ddphi(i,j), ddphi(i+1,j), ddphi(i+2,j), dddphipx)
 
             Jpx(i, j) = -zetapx*dphipx+kappa*phipx(i, j)*dddphipx
@@ -68,11 +71,41 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
             call nabla(dxinv, phipx(i-2,j)*Jpx(i-2,j), phipx(i-1,j)*Jpx(i-1,j), phipx(i,j)*Jpx(i,j), phipx(i+1,j)*Jpx(i+1,j), dchpx)
             chpx(i,j) = gamma*dchpx
 
-            nphi1(i,j) = phi(i,j)-dt*(advx(i,j)+chpx(i,j))
-            ! nphi1(i) = phi(i) - dt*(chp(i))
-
+            ! nphi1(i,j) = phi(i,j)-dt*(advx(i,j)+chpx(i,j))
         end do
     end do
+
+! cal y direction of advection and chemical potential term
+! ========================================================
+    do j = -5, nj+5
+        do i = -6, ni+7
+            phipy(i, j) = 1.0d0/16.0d0* &
+                    & (-phi(i, j-1)+9.0d0*phi(i, j)+9.0d0*phi(i, j+1)-phi(i, j+2))
+        end do
+    end do
+
+    do j = -2, nj+3
+        do i = -4, ni+5
+            zetapy = (temperature/((1.0d0-b*phipy(i, j))**2))-2.0d0*a*phipy(i, j)
+            call nabla(dyinv, phi(i,j-1)  , phi(i,j)  , phi(i,j+1)  , phi(i,j+2)  , dphipy  )
+            call nabla(dyinv, ddphi(i,j-1), ddphi(i,j), ddphi(i,j+1), ddphi(i,j+2), dddphipy)
+
+            Jpy(i, j) = -zetapy*dphipy+kappa*phipy(i, j)*dddphipy
+        end do
+    end do
+
+    do j = 0, nj+2
+        do i = -1, ni+3
+            call nabla(dyinv, phipy(i,j-2), phipy(i,j-1), phipy(i,j), phipy(i+1,j), dphiy)
+            advy(i, j) = u*dphiy
+
+            call nabla(dyinv, phipy(i,j-2)*Jpy(i,j-2), phipy(i,j-1)*Jpy(i,j-1), phipy(i,j)*Jpy(i,j), phipy(i,j+1)*Jpy(i,j+1), dchpy)
+            chpy(i,j) = gamma*dchpy
+
+            nphi1(i,j) = phi(i,j)-dt*(advy(i,j)+chpy(i,j))
+        end do
+    end do
+
 
     do j = 0, nj+1
         do i = 0, ni+1
