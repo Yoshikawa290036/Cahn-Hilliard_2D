@@ -15,8 +15,8 @@ program main
     integer :: dataou
     character(32) fname
 
-    dataou = 1000
-    maxstep = 80000
+    dataou = 100
+    maxstep = 40000
 
     ni = 64
     nj = 64
@@ -43,7 +43,7 @@ program main
 
     include'allocate.h'
     write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
-    call init(ni, nj, dx, dy, phi, phimin, phimax, 5.0d0)
+    call init(ni, nj, dx, dy, phi, phimin, phimax, 6.0d0)
     call bndset(ni, nj, phi)
     include'mkphi.h'
 
@@ -54,7 +54,6 @@ program main
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
         end if
-
     end do
 
 end program main
