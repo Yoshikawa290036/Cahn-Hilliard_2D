@@ -1,7 +1,7 @@
 
 ! periodic boundary conditions
 
-subroutine bundset(ni, nj, phi)
+subroutine bndset(ni, nj, phi)
     implicit none
 
     integer :: ni, nj
@@ -80,4 +80,4 @@ subroutine bundset(ni, nj, phi)
         end do
     end do
 
-end subroutine bundset
+end subroutine bndset

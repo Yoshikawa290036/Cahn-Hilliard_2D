@@ -41,12 +41,10 @@ program main
     u = 0.5d0
     v = 0.5d0
 
-    step = 0
     include'allocate.h'
-
     write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
     call init(ni, nj, dx, dy, phi, phimin, phimax, 5.0d0)
-
+    call bndset(ni, nj, phi)
     include'mkphi.h'
 
     ! do step = 1, maxstep

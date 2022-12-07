@@ -12,7 +12,7 @@ subroutine init(ni, nj, dx, dy, phi, phimin, phimax, R)
     midx = (dble(ni/2)-0.5d0)*dx
     midy = (dble(nj/2)-0.5d0)*dy
 
-    write (*, *) midx, midy
+    ! write (*, *) midx, midy
     do j = -6, nj+7
         do i = -6, ni+7
             x = (dble(i)-0.5d0)*dx
