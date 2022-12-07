@@ -24,9 +24,20 @@ subroutine init(ni, nj, dx, dy, phi, phimin, phimax, R)
     !         end if
     !     end do
     ! end do
+
+    ! do j = -6, nj+7
+    !     do i = -6, ni+7
+    !         if (i < ni/2-32/2 .or. i > ni/2+32/2) then
+    !             phi(i,j) = phimax
+    !         else
+    !             phi(i,j) = phimin
+    !         end if
+    !     end do
+    ! end do
+
     do j = -6, nj+7
         do i = -6, ni+7
-            if (i < ni/2-32/2 .or. i > ni/2+32/2) then
+            if (j < nj/2-32/2 .or. j > nj/2+32/2) then
                 phi(i,j) = phimax
             else
                 phi(i,j) = phimin

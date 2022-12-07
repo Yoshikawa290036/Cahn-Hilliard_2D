@@ -48,9 +48,9 @@ program main
     include'mkphi.h'
 
     do step = 1, maxstep
-        call bndset(ni, nj, phi)
         call calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 
+        call bndset(ni, nj, phi)
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
         end if
