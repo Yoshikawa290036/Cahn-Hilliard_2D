@@ -130,7 +130,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 !$OMP& PRIVATE(i, j, dphiy, dchpy)
     do j = 0, nj+2
         do i = -1, ni+3
-            call nabla(dyinv, phipy(i,j-2), phipy(i,j-1), phipy(i,j), phipy(i+1,j), dphiy)
+            call nabla(dyinv, phipy(i,j-2), phipy(i,j-1), phipy(i,j), phipy(i,j+1), dphiy)
             advy(i, j) = v*dphiy
 
             call nabla(dyinv, phipy(i,j-2)*Jpy(i,j-2), phipy(i,j-1)*Jpy(i,j-1), phipy(i,j)*Jpy(i,j), phipy(i,j+1)*Jpy(i,j+1), dchpy)
