@@ -30,18 +30,18 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 !$OMP& PRIVATE(i, j, m1x, m2x, p0x, p1x, p2x, m1y, m2y, p0y, p1y, p2y, ddphix, ddphiy)
     do j = -4, nj+5
         do i = -4, ni+5
-            m2x = -1.0d0/24.0d0*dxinv**2*phi(i-2, j)
-            m1x =  1.0d0/24.0d0*dxinv**2*phi(i-1, j)*16.0d0
-            p0x = -1.0d0/24.0d0*dxinv**2*phi(i  , j)*30.0d0
-            p1x =  1.0d0/24.0d0*dxinv**2*phi(i+1, j)*16.0d0
-            p2x = -1.0d0/24.0d0*dxinv**2*phi(i+2, j)
+            m2x = -1.0d0/12.0d0*dxinv**2*phi(i-2, j)
+            m1x =  1.0d0/12.0d0*dxinv**2*phi(i-1, j)*16.0d0
+            p0x = -1.0d0/12.0d0*dxinv**2*phi(i  , j)*30.0d0
+            p1x =  1.0d0/12.0d0*dxinv**2*phi(i+1, j)*16.0d0
+            p2x = -1.0d0/12.0d0*dxinv**2*phi(i+2, j)
             ddphix = m2x+m1x+p0x+p1x+p2x
 
-            m2y = -1.0d0/24.0d0*dxinv**2*phi(i, j-2)
-            m1y =  1.0d0/24.0d0*dxinv**2*phi(i, j-1)*16.0d0
-            p0y = -1.0d0/24.0d0*dxinv**2*phi(i, j  )*30.0d0
-            p1y =  1.0d0/24.0d0*dxinv**2*phi(i, j+1)*16.0d0
-            p2y = -1.0d0/24.0d0*dxinv**2*phi(i, j+2)
+            m2y = -1.0d0/12.0d0*dxinv**2*phi(i, j-2)
+            m1y =  1.0d0/12.0d0*dxinv**2*phi(i, j-1)*16.0d0
+            p0y = -1.0d0/12.0d0*dxinv**2*phi(i, j  )*30.0d0
+            p1y =  1.0d0/12.0d0*dxinv**2*phi(i, j+1)*16.0d0
+            p2y = -1.0d0/12.0d0*dxinv**2*phi(i, j+2)
             ddphiy = m2y+m1y+p0y+p1y+p2y
             ddphi(i,j) = ddphix + ddphiy
         end do
@@ -59,6 +59,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
         do i = -5, ni+5
             phipx(i, j) = 1.0d0/16.0d0* &
                     & (-phi(i-1, j)+9.0d0*phi(i, j)+9.0d0*phi(i+1, j)-phi(i+2, j))
+            ! phipx(i, j) = 0.5d0*(phi(i, j)+phi(i+1, j))
         end do
     end do
 !$OMP  END PARALLEL DO
@@ -105,6 +106,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
         do i = -6, ni+7
             phipy(i, j) = 1.0d0/16.0d0* &
                     & (-phi(i, j-1)+9.0d0*phi(i, j)+9.0d0*phi(i, j+1)-phi(i, j+2))
+            ! phipy(i, j)= 0.5d0*(phi(i, j)+phi(i, j+1))
         end do
     end do
 !$OMP  END PARALLEL DO
