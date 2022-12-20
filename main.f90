@@ -2,9 +2,9 @@ program main
     implicit none
 
     integer :: ni, nj
-    integer :: i, j
-    double precision :: x, y
-    double precision :: phimin, phimax
+    integer :: i, j, cnt, initcnt
+    double precision :: x, y, sum, initsum
+    double precision :: phimin, phimax, phimid
     double precision :: dx, dxinv, dy, dyinv
     double precision :: xl, yl
     double precision :: t, dt
@@ -16,7 +16,7 @@ program main
     character(32) fname
 
     dataou = 100
-    maxstep = 40000
+    maxstep = 80000
 
     ni = 64
     nj = 64
@@ -32,21 +32,25 @@ program main
 
     phimin = 0.265d0
     phimax = 0.405d0
+    phimid = 0.5d0*(phimin+phimax)
 
     xl = dx*dble(ni)
     yl = dy*dble(nj)
     dxinv = 1.0d0/dx
     dyinv = 1.0d0/dy
 
-    u = 0.5d0
-    v = 0.0d0
+    u = 0.35d0
+    v = 0.35d0
 
     include'allocate.h'
-    write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
-    call init(ni, nj, dx, dy, phi, phimin, phimax, 6.0d0)
+    ! write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
+    call init(ni, nj, dx, dy, phi, phimin, phimax, 10.0d0)
     call bndset(ni, nj, phi)
     step = 0
     include'mkphi.h'
+    include'cal_erea.h'
+    initsum = sum
+    initcnt = cnt
 
     do step = 1, maxstep
         call calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
@@ -54,6 +58,7 @@ program main
         call bndset(ni, nj, phi)
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
+            include'cal_erea.h'
         end if
     end do
 

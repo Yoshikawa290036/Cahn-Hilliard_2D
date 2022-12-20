@@ -15,13 +15,15 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
     double precision :: advy(-6:ni+7, -6:nj+7), chpy(-6:ni+7, -6:nj+7)
     double precision :: Jpx(-6:ni+7, -6:nj+7), zetapx
     double precision :: Jpy(-6:ni+7, -6:nj+7), zetapy
-    double precision :: Gamma
+    double precision :: alpha
     double precision :: m1x, m2x, p0x, p1x, p2x
     double precision :: m1y, m2y, p0y, p1y, p2y
     double precision :: dddphipx, dchpx
     double precision :: dddphipy, dchpy
-
-    Gamma = 12.0d0
+    double precision :: inv12, inv16
+    inv12 = 1.0d0/12.0d0
+    inv16 = 1.0d0/16.0d0
+    alpha = 12.0d0
 
     ! ddphi = nabla nabla phi
 !$OMP  PARALLEL DO &
@@ -30,18 +32,18 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 !$OMP& PRIVATE(i, j, m1x, m2x, p0x, p1x, p2x, m1y, m2y, p0y, p1y, p2y, ddphix, ddphiy)
     do j = -4, nj+5
         do i = -4, ni+5
-            m2x = -1.0d0/12.0d0*dxinv**2*phi(i-2, j)
-            m1x =  1.0d0/12.0d0*dxinv**2*phi(i-1, j)*16.0d0
-            p0x = -1.0d0/12.0d0*dxinv**2*phi(i  , j)*30.0d0
-            p1x =  1.0d0/12.0d0*dxinv**2*phi(i+1, j)*16.0d0
-            p2x = -1.0d0/12.0d0*dxinv**2*phi(i+2, j)
+            m2x = -inv12*dxinv**2*phi(i-2, j)
+            m1x =  inv12*dxinv**2*phi(i-1, j)*16.0d0
+            p0x = -inv12*dxinv**2*phi(i  , j)*30.0d0
+            p1x =  inv12*dxinv**2*phi(i+1, j)*16.0d0
+            p2x = -inv12*dxinv**2*phi(i+2, j)
             ddphix = m2x+m1x+p0x+p1x+p2x
 
-            m2y = -1.0d0/12.0d0*dxinv**2*phi(i, j-2)
-            m1y =  1.0d0/12.0d0*dxinv**2*phi(i, j-1)*16.0d0
-            p0y = -1.0d0/12.0d0*dxinv**2*phi(i, j  )*30.0d0
-            p1y =  1.0d0/12.0d0*dxinv**2*phi(i, j+1)*16.0d0
-            p2y = -1.0d0/12.0d0*dxinv**2*phi(i, j+2)
+            m2y = -inv12*dxinv**2*phi(i, j-2)
+            m1y =  inv12*dxinv**2*phi(i, j-1)*16.0d0
+            p0y = -inv12*dxinv**2*phi(i, j  )*30.0d0
+            p1y =  inv12*dxinv**2*phi(i, j+1)*16.0d0
+            p2y = -inv12*dxinv**2*phi(i, j+2)
             ddphiy = m2y+m1y+p0y+p1y+p2y
             ddphi(i,j) = ddphix + ddphiy
         end do
@@ -57,7 +59,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 !$OMP& PRIVATE(i, j)
     do j = -6, nj+7
         do i = -5, ni+5
-            phipx(i, j) = 1.0d0/16.0d0* &
+            phipx(i, j) = inv16* &
                     & (-phi(i-1, j)+9.0d0*phi(i, j)+9.0d0*phi(i+1, j)-phi(i+2, j))
             ! phipx(i, j) = 0.5d0*(phi(i, j)+phi(i+1, j))
         end do
@@ -89,7 +91,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
             advx(i, j) = u*dphix
 
             call nabla(dxinv, phipx(i-2,j)*Jpx(i-2,j), phipx(i-1,j)*Jpx(i-1,j), phipx(i,j)*Jpx(i,j), phipx(i+1,j)*Jpx(i+1,j), dchpx)
-            chpx(i,j) = gamma*dchpx
+            chpx(i,j) = alpha*dchpx
 
             ! nphi1(i,j) = phi(i,j)-dt*(advx(i,j)+chpx(i,j))
         end do
@@ -104,7 +106,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 !$OMP& PRIVATE(i, j)
     do j = -5, nj+5
         do i = -6, ni+7
-            phipy(i, j) = 1.0d0/16.0d0* &
+            phipy(i, j) = inv16* &
                     & (-phi(i, j-1)+9.0d0*phi(i, j)+9.0d0*phi(i, j+1)-phi(i, j+2))
             ! phipy(i, j)= 0.5d0*(phi(i, j)+phi(i, j+1))
         end do
@@ -136,7 +138,7 @@ subroutine calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
             advy(i, j) = v*dphiy
 
             call nabla(dyinv, phipy(i,j-2)*Jpy(i,j-2), phipy(i,j-1)*Jpy(i,j-1), phipy(i,j)*Jpy(i,j), phipy(i,j+1)*Jpy(i,j+1), dchpy)
-            chpy(i,j) = gamma*dchpy
+            chpy(i,j) = alpha*dchpy
 
             ! nphi1(i,j) = phi(i,j)-dt*(advy(i,j)+chpy(i,j))
         end do

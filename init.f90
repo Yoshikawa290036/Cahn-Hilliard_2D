@@ -23,9 +23,9 @@ subroutine init(ni, nj, dx, dy, phi, phimin, phimax, R)
             x = (dble(i)-0.5d0)*dx
             y = (dble(j)-0.5d0)*dy
             if ((x-midx)**2+(y-midy)**2 <= R**2) then
-                phi(i, j) = phimax
-            else
                 phi(i, j) = phimin
+            else
+                phi(i, j) = phimax
             end if
         end do
     end do
