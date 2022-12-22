@@ -9,14 +9,13 @@ program main
     double precision :: xl, yl
     double precision :: t, dt
     double precision :: a, b, temperature, kappa
-    double precision :: u, v
-    double precision, dimension(:, :), allocatable :: phi
+    double precision, dimension(:, :), allocatable :: phi, u, v
     integer :: maxstep, step
     integer :: dataou
     character(32) fname
 
     dataou = 100
-    maxstep = 80000
+    maxstep = 10000
 
     ni = 64
     nj = 64
@@ -39,16 +38,15 @@ program main
     dxinv = 1.0d0/dx
     dyinv = 1.0d0/dy
 
-    u = 0.35d0
-    v = 0.35d0
-
     include'allocate.h'
     ! write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
-    call init(ni, nj, dx, dy, phi, phimin, phimax, 10.0d0)
+    call init(ni, nj, dx, dy, phi, phimin, phimax, 14.0d0)
     call bndset(ni, nj, phi)
+    call cal_vel(ni, nj, u, v, xl, yl, dx, dy)
     step = 0
     include'mkphi.h'
     include'cal_erea.h'
+    include'mkuvphi.h'
     initsum = sum
     initcnt = cnt
 

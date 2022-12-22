@@ -1,9 +1,10 @@
 #FFLAGS=-O3 -fopenmp
-# FFLAGS=-fbounds-check -fbacktrace -g
-FFLAGS=-mcmodel=medium -O3 -fopenmp
+FFLAGS=-fbounds-check -fbacktrace -g
+# FFLAGS=-mcmodel=medium -O3 -fopenmp
 
 F90SRCS =           \
 bndset.f90 			\
+cal_vel.f90			\
 calphi.f90			\
 init.f90			\
 nabla.f90			\
