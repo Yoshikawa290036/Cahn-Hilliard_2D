@@ -10,22 +10,24 @@ program main
     double precision :: t, dt
     double precision :: a, b, temperature, kappa
     double precision, dimension(:, :), allocatable :: phi, u, v
+    double precision :: R
     integer :: maxstep, step
-    integer :: dataou
+    integer :: dataou, hoge
     character(32) fname
 
-    dataou = 100
-    maxstep = 10000
+    dataou = 314
+    maxstep = 62800
+    ! maxstep = 1
 
-    ni = 64
-    nj = 64
-
+    ni = 100
+    nj = 100
+    R = 15.0d0
     a = 1.0d0
     b = 1.0d0
     kappa = 0.1d0
     temperature = 0.293d0
 
-    dt = 2.5e-2
+    dt = 0.01d0
     dx = 1.0d0
     dy = 1.0d0
 
@@ -40,9 +42,10 @@ program main
 
     include'allocate.h'
     ! write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
-    call init(ni, nj, dx, dy, phi, phimin, phimax, 14.0d0)
+    call init(ni, nj, dx, dy, phi, phimin, phimax, R)
     call bndset(ni, nj, phi)
     call cal_vel(ni, nj, u, v, xl, yl, dx, dy)
+    ! write (*, '("Courant Number      ",20e20.10)') abs(u(0, nj/2+R*dyinv)*dt/dx)
     step = 0
     include'mkphi.h'
     include'cal_erea.h'
@@ -50,7 +53,7 @@ program main
     initsum = sum
     initcnt = cnt
 
-    do step = 1, maxstep
+    do step = 0, maxstep
         call calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
 
         call bndset(ni, nj, phi)
