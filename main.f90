@@ -40,13 +40,14 @@ program main
 
     include'allocate.h'
     ! write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
-    call init(ni, nj, dx, dy, phi, phimin, phimax, 14.0d0)
+    call init(ni, nj, dx, dy, phi, phimin, phimax, 8.0d0)
     call bndset(ni, nj, phi)
     call cal_vel(ni, nj, u, v, xl, yl, dx, dy)
     step = 0
     include'mkphi.h'
     include'cal_erea.h'
     include'mkuvphi.h'
+    call err_gj(step, ni, nj, dx, dy, temperature, a, b, kappa, phi)
     initsum = sum
     initcnt = cnt
 
@@ -57,6 +58,7 @@ program main
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
             include'cal_erea.h'
+            call err_gj(step, ni, nj, dx, dy, temperature, a, b, kappa, phi)
         end if
     end do
 

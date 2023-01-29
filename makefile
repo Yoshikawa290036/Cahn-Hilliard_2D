@@ -6,6 +6,7 @@ F90SRCS =           \
 bndset.f90 			\
 cal_vel.f90			\
 calphi.f90			\
+err_gj.f90			\
 init.f90			\
 nabla.f90			\
 main.f90            \
