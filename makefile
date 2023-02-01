@@ -1,6 +1,6 @@
 #FFLAGS=-O3 -fopenmp
-FFLAGS=-fbounds-check -fbacktrace -g
-# FFLAGS=-mcmodel=medium -O3 -fopenmp
+# FFLAGS=-fbounds-check -fbacktrace -g
+FFLAGS=-mcmodel=medium -O3 -fopenmp
 
 F90SRCS =           \
 bndset.f90 			\
