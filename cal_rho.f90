@@ -12,9 +12,16 @@ subroutine cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
     rhomid = 0.5d0*(rhoL+rhoG)
     rhomrg = 0.5d0*(rhoL-rhoG)
 
+!$OMP  PARALLEL DO &
+!$OMP& SCHEDULE(static,1) &
+!$OMP& DEFAULT(SHARED) &
+!$OMP& PRIVATE(i,j)
+
     do j = -6, nj+7
         do i = -6, ni+7
             rho(i, j) = rhomid+rhomrg*sin(PI*(phimid-phi(i,j))/(phimax-phimin))
         end do
     end do
+!$OMP  END PARALLEL DO
+
 end subroutine cal_rho
