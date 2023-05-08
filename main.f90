@@ -9,14 +9,17 @@ program main
     double precision :: xl, yl
     double precision :: t, dt
     double precision :: a, b, temperature, kappa
-    double precision, dimension(:, :), allocatable :: phi, u, v
+    double precision :: rhoL, rhoG
+    double precision, dimension(:, :), allocatable :: phi, u, v, rho
     double precision :: R
     integer :: maxstep, step
     integer :: dataou, hoge
     character(32) fname
 
     dataou = 314
-    maxstep = 62800
+    ! maxstep = 62800
+    maxstep = dataou*5
+
     ! maxstep = 1
 
     ni = 100
@@ -40,6 +43,9 @@ program main
     dxinv = 1.0d0/dx
     dyinv = 1.0d0/dy
 
+    rhoL = 1.25e-6
+    rhoG = 1.0e-3
+
     include'allocate.h'
     ! write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
     call init(ni, nj, dx, dy, phi, phimin, phimax, R)
@@ -55,12 +61,12 @@ program main
 
     do step = 0, maxstep
         call calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
-
+        call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call bndset(ni, nj, phi)
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
+            include'mkrho.h'
             include'cal_erea.h'
         end if
     end do
-
 end program main
