@@ -8,9 +8,9 @@ program main
     double precision :: dx, dxinv, dy, dyinv
     double precision :: xl, yl
     double precision :: t, dt
-    double precision :: a, b, temperature, kappa
+    double precision :: a, b, temperature, kappa_phi, kappa_s
     double precision :: rhoL, rhoG
-    double precision, dimension(:, :), allocatable :: phi, u, v, rho
+    double precision, dimension(:, :), allocatable :: phi, u, v, rho, up, vp, eta
     double precision :: R
     integer :: maxstep, step
     integer :: dataou, hoge
@@ -19,15 +19,18 @@ program main
     dataou = 314
     ! maxstep = 62800
     maxstep = dataou*5
-
-    ! maxstep = 1
-
+    
     ni = 100
     nj = 100
     R = 15.0d0
     a = 1.0d0
     b = 1.0d0
-    kappa = 0.1d0
+
+    kappa_phi = 0.1d0
+    kappa_s = 1.71e3
+    rhoL = 1.25e-6
+    rhoG = 1.0e-3
+
     temperature = 0.293d0
 
     dt = 0.01d0
@@ -43,15 +46,12 @@ program main
     dxinv = 1.0d0/dx
     dyinv = 1.0d0/dy
 
-    rhoL = 1.25e-6
-    rhoG = 1.0e-3
+
 
     include'allocate.h'
-    ! write (*, '("Courant Number      ",20e20.10)') abs(u*dt/dx)
     call init(ni, nj, dx, dy, phi, phimin, phimax, R)
     call bndset(ni, nj, phi)
     call cal_vel(ni, nj, u, v, xl, yl, dx, dy)
-    ! write (*, '("Courant Number      ",20e20.10)') abs(u(0, nj/2+R*dyinv)*dt/dx)
     step = 0
     include'mkphi.h'
     include'cal_erea.h'
@@ -60,7 +60,7 @@ program main
     initcnt = cnt
 
     do step = 0, maxstep
-        call calphi(ni, nj, u, v, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
+        call calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa_phi)
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call bndset(ni, nj, phi)
         if (mod(step, dataou) == 0) then
