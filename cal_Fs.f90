@@ -15,6 +15,7 @@ subroutine cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
     integer :: i, j
     double precision :: inv24, inv16, inv12
     double precision :: m2, m1, p0, p1, p2
+    double precision :: x, y
 
     inv12 = 1.0d0/12.0d0
     inv24 = 1.0d0/24.0d0
@@ -23,9 +24,10 @@ subroutine cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
 
     ! do j = -6, nj+7
     !     do i = -6, ni+7
-    !         x = (dble(i)-0.5d0)*dx
-    !         y = (dble(j)-0.5d0)*dy
-            
+    !         x = (dble(i)-0.5d0)*1.0d0
+    !         y = (dble(j)-0.5d0)*1.0d0
+    !         rho(i,j) = sin(x/10.0d0)*cos(y/10.0d0)
+    !         ! rho(i,j) = sin(y/10.0d0)
     !     end do
     ! end do
 
@@ -169,5 +171,14 @@ subroutine cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
     end do
 !$OMP  END PARALLEL DO
 
+    ! do j = 1, nj
+    !     do i = 1, ni
+    !         x = (dble(i)-0.5d0)*1.0d0
+    !         y = (dble(j)-0.5d0)*1.0d0
+    !         write (22, '(20e20.10)') x, y, Fsx(i,j), Fsy(i,j), rho(i, j), drhodx(i,j), drhody(i,j), cos(x)*cos(y)
+    !         ! write (22, '(20e20.10)') x, dble(j), rhopy(i,j)
+    !     end do
+    !     write (22,*) 
+    ! end do
 
 end subroutine cal_Fs

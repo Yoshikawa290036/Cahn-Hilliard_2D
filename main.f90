@@ -20,8 +20,8 @@ program main
     maxstep = 1
     ! maxstep = dataou*5
     
-    ni = 100
-    nj = 100
+    ni = 64
+    nj = 64
     R = 15.0d0
     a = 1.0d0
     b = 1.0d0
