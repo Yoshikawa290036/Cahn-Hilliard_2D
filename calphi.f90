@@ -2,10 +2,10 @@ subroutine calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, k
     implicit none
     integer :: ni, nj
     double precision :: dxinv, dyinv
-    double precision :: phi(-6:ni+7, -6:nj+7)
-    double precision :: eta(-6:ni+7, -6:nj+7)
-    double precision :: u(-6:ni+7, -6:nj+7)
-    double precision :: v(-6:ni+7, -6:nj+7)
+    double precision ::   phi(-6:ni+7, -6:nj+7)
+    double precision ::   eta(-6:ni+7, -6:nj+7)
+    double precision ::     u(-6:ni+7, -6:nj+7)
+    double precision ::     v(-6:ni+7, -6:nj+7)
     double precision :: phipx(-6:ni+7, -6:nj+7), dphix, dphipx
     double precision :: phipy(-6:ni+7, -6:nj+7), dphiy, dphipy
 
@@ -16,8 +16,8 @@ subroutine calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, k
     integer :: i, j
     double precision :: advx(-6:ni+7, -6:nj+7), chpx(-6:ni+7, -6:nj+7)
     double precision :: advy(-6:ni+7, -6:nj+7), chpy(-6:ni+7, -6:nj+7)
-    double precision :: Jpx(-6:ni+7, -6:nj+7), zetapx
-    double precision :: Jpy(-6:ni+7, -6:nj+7), zetapy
+    double precision ::  Jpx(-6:ni+7, -6:nj+7), zetapx
+    double precision ::  Jpy(-6:ni+7, -6:nj+7), zetapy
     double precision :: alpha
     double precision :: m1x, m2x, p0x, p1x, p2x
     double precision :: m1y, m2y, p0y, p1y, p2y

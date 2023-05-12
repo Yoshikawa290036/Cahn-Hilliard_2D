@@ -10,15 +10,15 @@ program main
     double precision :: t, dt
     double precision :: a, b, temperature, kappa_phi, kappa_s
     double precision :: rhoL, rhoG
-    double precision, dimension(:, :), allocatable :: phi, u, v, rho, up, vp, eta
+    double precision, dimension(:, :), allocatable :: phi, u, v, rho, up, vp, eta, Fsx, Fsy
     double precision :: R
     integer :: maxstep, step
     integer :: dataou, hoge
     character(32) fname
 
     dataou = 314
-    ! maxstep = 62800
-    maxstep = dataou*5
+    maxstep = 1
+    ! maxstep = dataou*5
     
     ni = 100
     nj = 100
@@ -61,8 +61,10 @@ program main
 
     do step = 0, maxstep
         call calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa_phi)
+        call bndset(ni, nj, phi)        
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
-        call bndset(ni, nj, phi)
+        call cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
+
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
             include'mkrho.h'
