@@ -1,3 +1,4 @@
+! Fourth-order precision center difference at midpoint
 ! ans(i+1/2)
 
 subroutine nabla(dxinv, ans, inv24, m2, m1, p1, p2)

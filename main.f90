@@ -10,7 +10,10 @@ program main
     double precision :: t, dt
     double precision :: a, b, temperature, kappa_phi, kappa_s
     double precision :: rhoL, rhoG
-    double precision, dimension(:, :), allocatable :: phi, u, v, rho, up, vp, eta, Fsx, Fsy
+    double precision, dimension(:, :), allocatable :: phi, u, v
+    double precision, dimension(:, :), allocatable :: rho, up, vp
+    double precision, dimension(:, :), allocatable :: eta, Fsx, Fsy
+    double precision, dimension(:, :), allocatable :: advx, advy
     double precision :: R
     integer :: maxstep, step
     integer :: dataou, hoge
@@ -64,6 +67,7 @@ program main
         call bndset(ni, nj, phi)        
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
+        call cal_adv(ni, nj, u, v, advx, advy, dxinv, dyinv)
 
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
