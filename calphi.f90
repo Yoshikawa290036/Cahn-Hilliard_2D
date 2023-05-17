@@ -92,10 +92,10 @@ subroutine calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, k
     do j = -1, nj+3
         do i = 0, ni+2
             call nabla(dxinv, advx(i,j), inv24, &
-                      & 0.5d0*(u(i-2,j)+u(i-1,j))*phipx(i-2,j), &
-                      & 0.5d0*(u(i-1,j)+u(i  ,j))*phipx(i-1,j), &
-                      & 0.5d0*(u(i  ,j)+u(i+1,j))*phipx(i  ,j), &
-                      & 0.5d0*(u(i+1,j)+u(i+2,j))*phipx(i+1,j))
+                      & u(i-2,j)*phipx(i-2,j),  &
+                      & u(i-1,j)*phipx(i-1,j),  &
+                      & u(i  ,j)*phipx(i  ,j),  &
+                      & u(i+1,j)*phipx(i+1,j))
             ! advx(i, j) = u*dphix
 
             call nabla(dxinv, dchpx, inv24, &
@@ -147,10 +147,10 @@ subroutine calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, k
     do j = 0, nj+2
         do i = -1, ni+3
             call nabla(dyinv, advy(i,j), inv24,  &
-                      & 0.5d0*(v(i,j-2)+v(i,j-1))*phipy(i,j-2), &
-                      & 0.5d0*(v(i,j-1)+v(i,j  ))*phipy(i,j-1), &
-                      & 0.5d0*(v(i,j  )+v(i,j+1))*phipy(i,j  ), &
-                      & 0.5d0*(v(i,j+1)+v(i,j+2))*phipy(i,j+1))
+                      & v(i,j-2)*phipy(i,j-2),   &
+                      & v(i,j-1)*phipy(i,j-1),   &
+                      & v(i,j  )*phipy(i,j  ),   &
+                      & v(i,j+1)*phipy(i,j+1))
             ! advy(i, j) = v*dphiy
 
             call nabla( dyinv, dchpy, inv24, &
