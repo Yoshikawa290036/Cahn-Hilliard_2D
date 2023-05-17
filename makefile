@@ -9,6 +9,7 @@ cal_Fs.f90					\
 cal_rho.f90					\
 cal_up.f90					\
 cal_vel.f90					\
+cal_vis.f90					\
 calphi.f90					\
 init.f90					\
 nabla.f90					\

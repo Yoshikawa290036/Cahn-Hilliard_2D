@@ -10,10 +10,12 @@ program main
     double precision :: t, dt
     double precision :: a, b, temperature, kappa_phi, kappa_s
     double precision :: rhoL, rhoG
+    double precision :: muL, muG
     double precision, dimension(:, :), allocatable :: phi, u, v
     double precision, dimension(:, :), allocatable :: rho, up, vp
     double precision, dimension(:, :), allocatable :: eta, Fsx, Fsy
     double precision, dimension(:, :), allocatable :: advx, advy
+    double precision, dimension(:, :), allocatable :: visx, visy
     double precision :: R
     integer :: maxstep, step
     integer :: dataou, hoge
@@ -31,8 +33,10 @@ program main
 
     kappa_phi = 0.1d0
     kappa_s = 1.71e3
-    rhoL = 1.25e-6
-    rhoG = 1.0e-3
+    rhoL = 1.0e-3
+    rhoG = 1.25e-6
+    muL = 1.06e-5
+    muG = 1.43e-7
 
     temperature = 0.293d0
 
@@ -68,11 +72,12 @@ program main
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
         call cal_adv(ni, nj, u, v, advx, advy, dxinv, dyinv)
-
+        ! call cal_vis(ni, nj, visx, visy, u, v, dxinv, dyinv)
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
             include'mkrho.h'
             include'cal_erea.h'
         end if
+        flush(6)
     end do
 end program main

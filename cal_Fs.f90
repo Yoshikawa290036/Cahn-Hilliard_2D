@@ -24,8 +24,8 @@ subroutine cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
 
     ! do j = -6, nj+7
     !     do i = -6, ni+7
-    !         x = (dble(i)-0.5d0)*1.0d0
-    !         y = (dble(j)-0.5d0)*1.0d0
+    !         x = (dble(i)-0.5d0)/dxinv
+    !         y = (dble(j)-0.5d0)/dyinv
     !         rho(i,j) = sin(x/10.0d0)*cos(y/10.0d0)
     !         ! rho(i,j) = sin(y/10.0d0)
     !     end do
@@ -173,8 +173,8 @@ subroutine cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
 
     ! do j = 1, nj
     !     do i = 1, ni
-    !         x = (dble(i)-0.5d0)*1.0d0
-    !         y = (dble(j)-0.5d0)*1.0d0
+    !         x = (dble(i)-0.5d0)/dxinv
+    !         y = (dble(j)-0.5d0)/dyinv
     !         write (22, '(20e20.10)') x, y, Fsx(i,j), Fsy(i,j), rho(i, j), drhodx(i,j), drhody(i,j), cos(x)*cos(y)
     !         ! write (22, '(20e20.10)') x, dble(j), rhopy(i,j)
     !     end do
