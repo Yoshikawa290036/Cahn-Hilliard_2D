@@ -4,7 +4,6 @@ FFLAGS=-fbounds-check -fbacktrace -g
 
 F90SRCS =          			\
 bndset_phi.f90				\
-bndset.f90 					\
 cal_adv.f90					\
 cal_Fs.f90					\
 cal_rho.f90					\

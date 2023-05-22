@@ -58,7 +58,7 @@ program main
 
     include'allocate.h'
     call init(ni, nj, dx, dy, phi, phimin, phimax, R)
-    call bndset(ni, nj, phi)
+    call bndset_phi(ni, nj, phi)
     call cal_vel(ni, nj, u, v, xl, yl, dx, dy)
     step = 0
     include'mkphi.h'
