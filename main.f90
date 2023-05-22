@@ -68,7 +68,7 @@ program main
     initcnt = cnt
 
     do step = 0, maxstep
-        call calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa_phi)
+        call cal_phi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa_phi)
         call bndset(ni, nj, phi)        
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)

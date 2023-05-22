@@ -1,4 +1,4 @@
-subroutine calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
+subroutine cal_phi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa)
     implicit none
     integer :: ni, nj
     double precision :: dxinv, dyinv
@@ -177,4 +177,4 @@ subroutine calphi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, k
     end do
 !$OMP  END PARALLEL DO
 
-end subroutine calphi
+end subroutine cal_phi
