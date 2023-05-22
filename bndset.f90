@@ -72,32 +72,32 @@ subroutine bndset(ni, nj, phi)
     end do
 !$OMP  END PARALLEL DO
 
-    ! left bottom
-    do j = -6, 0
-        do i = -6, 0
-            phi(i, j) = phi(ni+i, nj+j)
-        end do
-    end do
+    ! ! left bottom
+    ! do j = -6, 0
+    !     do i = -6, 0
+    !         phi(i, j) = phi(ni+i, nj+j)
+    !     end do
+    ! end do
 
-    ! right bottom
-    do j = -6, 0
-        do i = ni+1, ni+7
-            phi(i, j) = phi(i-ni, nj+j)
-        end do
-    end do
+    ! ! right bottom
+    ! do j = -6, 0
+    !     do i = ni+1, ni+7
+    !         phi(i, j) = phi(i-ni, nj+j)
+    !     end do
+    ! end do
 
-    ! left top
-    do j = nj+1, nj+7
-        do i = -6, 0
-            phi(i, j) = phi(ni+i, j-nj)
-        end do
-    end do
+    ! ! left top
+    ! do j = nj+1, nj+7
+    !     do i = -6, 0
+    !         phi(i, j) = phi(ni+i, j-nj)
+    !     end do
+    ! end do
 
-    ! right top
-    do j = nj+1, nj+7
-        do i = ni+1, ni+7
-            phi(i, j) = phi(i-ni, j-nj)
-        end do
-    end do
+    ! ! right top
+    ! do j = nj+1, nj+7
+    !     do i = ni+1, ni+7
+    !         phi(i, j) = phi(i-ni, j-nj)
+    !     end do
+    ! end do
 
 end subroutine bndset

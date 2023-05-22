@@ -3,6 +3,7 @@ FFLAGS=-fbounds-check -fbacktrace -g
 # FFLAGS=-mcmodel=medium -O3 -fopenmp
 
 F90SRCS =          			\
+bndset_phi.f90				\
 bndset.f90 					\
 cal_adv.f90					\
 cal_Fs.f90					\

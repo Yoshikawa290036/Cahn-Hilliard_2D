@@ -1,7 +1,7 @@
 sum = 0.0d0
 cnt = 0
-do j = 1, nj-1
-    do i = 1, ni-1
+do j = 1, nj
+    do i = 1, ni
         sum = sum + phi(i,j)
         if ( phi(i,j) < phimid ) then
             cnt = cnt + 1

@@ -69,7 +69,8 @@ program main
 
     do step = 0, maxstep
         call cal_phi(ni, nj, u, v, eta, dxinv, dyinv, phi, dt, a, b, temperature, kappa_phi)
-        call bndset(ni, nj, phi)        
+        ! call bndset(ni, nj, phi)        
+        call bndset_phi(ni, nj, phi)
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
         call cal_vel_ave(ni, nj, u, v, ua, va)
@@ -85,6 +86,6 @@ program main
             include'cal_erea.h'
         end if
         flush(6)
-        
+
     end do
 end program main
