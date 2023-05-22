@@ -7,6 +7,7 @@ bndset.f90 					\
 cal_adv.f90					\
 cal_Fs.f90					\
 cal_rho.f90					\
+cal_vel_ave.f90				\
 cal_up.f90					\
 cal_vel.f90					\
 cal_vis.f90					\

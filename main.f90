@@ -12,6 +12,7 @@ program main
     double precision :: rhoL, rhoG
     double precision :: muL, muG
     double precision, dimension(:, :), allocatable :: phi, u, v
+    double precision, dimension(:, :), allocatable :: ua, va
     double precision, dimension(:, :), allocatable :: rho, up, vp
     double precision, dimension(:, :), allocatable :: eta, Fsx, Fsy
     double precision, dimension(:, :), allocatable :: advx, advy
@@ -71,8 +72,10 @@ program main
         call bndset(ni, nj, phi)        
         call cal_rho(ni, nj, rhoL, rhoG, phimin, phimax, phi, rho)
         call cal_Fs(ni, nj, dxinv, dyinv, rho, Fsx, Fsy, kappa_s)
-        call cal_adv(ni, nj, u, v, advx, advy, dxinv, dyinv)
-        ! call cal_vis(ni, nj, visx, visy, u, v, dxinv, dyinv)
+        call cal_vel_ave(ni, nj, u, v, ua, va)
+        call cal_adv(ni, nj, u, v, ua, va, advx, advy, dxinv, dyinv)
+        call cal_vis(ni, nj, visx, visy, u, v, ua, va, &
+                     dxinv, dyinv, muL, muG, rhoL, rhoG, rho)
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
             include'mkrho.h'
