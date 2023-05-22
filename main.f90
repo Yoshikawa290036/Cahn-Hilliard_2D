@@ -76,11 +76,15 @@ program main
         call cal_adv(ni, nj, u, v, ua, va, advx, advy, dxinv, dyinv)
         call cal_vis(ni, nj, visx, visy, u, v, ua, va, &
                      dxinv, dyinv, muL, muG, rhoL, rhoG, rho)
+        call cal_velp(ni, nj, dt, rho, up, vp, &
+                    advx, advy, Fsx, Fsy, visx, visy)
+        
         if (mod(step, dataou) == 0) then
             include'mkphi.h'
             include'mkrho.h'
             include'cal_erea.h'
         end if
         flush(6)
+        
     end do
 end program main
